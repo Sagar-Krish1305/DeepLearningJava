@@ -15,9 +15,9 @@ public class CheckingEXOR {
 
     public static void main(String[] args) {
         
-        NeuralNetwork nn = new NeuralNetwork();
-        nn.addFullyConnectedLayer(2, 3, 0.4, 129, 1);
-        nn.addFullyConnectedLayer(3, 1, 0.5, 125, 1);
+        NeuralNetwork nn = new NeuralNetwork(2, 324, leak);
+        nn.addFullyConnectedLayer(2, 3, 0.4, 129);
+        nn.addFullyConnectedLayer(3, 1, 0.5, 125);
 
         double[][] inputs = {
             {1,1}, {1,0}, {0,1}, {0,0}

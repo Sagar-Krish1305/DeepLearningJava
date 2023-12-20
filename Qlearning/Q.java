@@ -1,7 +1,7 @@
 package Qlearning;
 import java.util.Random;
 
-import NeuralNetworks.Martrix.Matrix;
+import NeuralNetworks.Matrix.Matrix;
 
 class Q{
 

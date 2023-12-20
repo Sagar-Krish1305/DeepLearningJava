@@ -1,4 +1,4 @@
-import NeuralNetworks.Martrix.Matrix;
+import NeuralNetworks.Matrix.Matrix;
 
 public class CheckingConv {
     public static void main(String[] args) {
@@ -15,7 +15,7 @@ public class CheckingConv {
         });
 
         
-        Matrix c = m.conv(m1);
+        Matrix c = m.correlate(m1);
 
         c.printMatrix();
 

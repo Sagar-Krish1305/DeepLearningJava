@@ -1,0 +1,42 @@
+{
+    // Use IntelliSense to learn about possible attributes.
+    // Hover to view descriptions of existing attributes.
+    // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "type": "java",
+            "name": "Current File",
+            "request": "launch",
+            "mainClass": "${file}"
+        },
+        {
+            "type": "java",
+            "name": "CheckingConv",
+            "request": "launch",
+            "mainClass": "CheckingConv",
+            "projectName": "DeepLearningJava_87762365"
+        },
+        {
+            "type": "java",
+            "name": "CheckingEXOR",
+            "request": "launch",
+            "mainClass": "CheckingEXOR",
+            "projectName": "DeepLearningJava_87762365"
+        },
+        {
+            "type": "java",
+            "name": "DataReader",
+            "request": "launch",
+            "mainClass": "DataReader",
+            "projectName": "DeepLearningJava_87762365"
+        },
+        {
+            "type": "java",
+            "name": "Q",
+            "request": "launch",
+            "mainClass": "Qlearning.Q",
+            "projectName": "DeepLearningJava_87762365"
+        }
+    ]
+}
