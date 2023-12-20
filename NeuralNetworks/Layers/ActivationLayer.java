@@ -6,16 +6,16 @@ import NeuralNetworks.Matrix.UTILFunctions;
 
 public class ActivationLayer extends Layer{
 
-    public int type;
-    private double[] lastInput;
+
+    private double[] lastOutput;
     public ActivationLayer(int type, int r, double lr) {
         super(r, 1, r, 1, lr);
     }
 
     @Override
     public Matrix getOutput(double[] inputs) {
-        lastInput = inputs;
         Matrix m = activate(UTILFunctions.ArrayToMatrix(inputs));
+        lastOutput = UTILFunctions.outputAsArray(m);
         if(_nextLayer != null){
             return _nextLayer.getOutput(UTILFunctions.outputAsArray(m));
         }
@@ -31,7 +31,7 @@ public class ActivationLayer extends Layer{
     public void backPropogation(double[] gradLoss) {
         double[] afp = null;
         try {
-            afp = UTILFunctions.outputAsArray(UTILFunctions.ArrayToMatrix(lastInput).Dot(deactivate(UTILFunctions.ArrayToMatrix(gradLoss))));
+            afp = UTILFunctions.outputAsArray(UTILFunctions.ArrayToMatrix(gradLoss).Dot(deactivate(UTILFunctions.ArrayToMatrix(lastOutput))));
         } catch (Exception e) {
             e.printStackTrace();
         }

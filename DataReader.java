@@ -37,29 +37,40 @@ public class DataReader {
         NeuralNetwork nn = new NeuralNetwork(2, 143, 0.4);
         nn.addConvolutionLayer(28, 28, 1, 1, 5);
         nn.addActivationLayer(2);
-        nn.addFullyConnectedLayer(9);
-
+        nn.addFullyConnectedLayer(2);
+        nn.addActivationLayer(2);
         
-        double target[] = new double[]{0,0,0,0,0,0,0,0,0};
-        nn.printDetails();
-        for(int i = 0 ; i < 1 ; i++){
-            target[testLabels.get(i)] = 1;
-            nn.train(UTILFunctions.outputAsArray(Matrix.flattenMatrix(new Matrix[]{testImages.get(i)}, 28, 28)), target);
-            target[testLabels.get(i)] = 0;
+        ArrayList<Matrix> imgs = new ArrayList<>();
+        ArrayList<Integer> l = new ArrayList<>();
+        for(int i = 0 ; i < testImages.size() ; i++){
+            if(testLabels.get(i)==1 || testLabels.get(i)==0){
+                imgs.add(testImages.get(i));
+                l.add(testLabels.get(i));
+            }
         }
 
-        int a = 5323;
+        double target[] = new double[]{0,0};
+        nn.printDetails();
+        int n = 0;
+        for(int i = 0 ; i < imgs.size() ; i++){
 
-        double[] d = nn.getOutput(UTILFunctions.outputAsArray(Matrix.flattenMatrix(new Matrix[]{
-            testImages.get(a)
-        }, 28 ,28)));
+            target[l.get(i)] = 1; // 0 or 1
+            nn.train(UTILFunctions.outputAsArray(Matrix.flattenMatrix(new Matrix[]{imgs.get(i)}, 28, 28)), target);
+            target[l.get(i)] = 0;
+            System.out.println(n++);
+
+        }
 
         
+        for(int a = 0 ; a < imgs.size() ; a++){
+        double[] d = nn.getOutput(UTILFunctions.outputAsArray(Matrix.flattenMatrix(new Matrix[]{
+            imgs.get(a)
+        }, 28 ,28)));
         
         System.out.println("OUTPUT PREDICTED : " + Arrays.toString(d));
-
-        System.out.println("OUTPUT REQUIRED : " + testLabels.get(a));
-
+        System.out.println("OUTPUT REQUIRED : " + l.get(a));
+        System.out.println();
+        }   
     }
 
     private static List<Matrix> readImages(String filename) {

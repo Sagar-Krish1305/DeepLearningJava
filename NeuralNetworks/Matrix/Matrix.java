@@ -51,6 +51,13 @@ public class Matrix{
 
     public Matrix mult(Matrix m1) throws Exception{
         if(cols != m1.rows){
+            System.out.println("FIRST MATRIX : ");
+            System.out.println("Rows : " + rows);
+            System.out.println("Cols : " + cols);
+
+            System.out.println("SECOND MATRIX : ");
+            System.out.println("Rows : " + m1.rows);
+            System.out.println("Cols : " + m1.cols);
             throw new Exception("OPERATION : MULTIPLICATION \n EXCEPTION : Matrices have different Dimensions.");
         }
 
@@ -80,7 +87,7 @@ public class Matrix{
         Random r = new Random(SEED);
         for(int i = 0 ; i < rows ; i++){
             for(int j = 0 ; j < cols ; j++){
-                data[i][j] = 1;
+                data[i][j] = r.nextGaussian();
             }
         }
     }
@@ -187,7 +194,6 @@ public class Matrix{
 
     public static Matrix[] imagifyMatrix(Matrix m, int l, int r, int c){
         Matrix[] ans = new Matrix[l];
-        m.printDimensions("IMAGE");
         int idx = 0;
         for(int i = 0 ; i < l ; i++){
             Matrix a = new Matrix(r, c);

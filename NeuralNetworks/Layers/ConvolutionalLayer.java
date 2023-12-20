@@ -50,12 +50,14 @@ public class ConvolutionalLayer extends Layer{
     public Matrix[] convolutionForwardPass(Matrix[] m){
         lastInput = m;
         Matrix[] _output = new Matrix[_bias.length];
-        _output = _bias;
+
         try {  
             for(int i = 0 ; i < depth ; i++){
+                _output[i] = new Matrix(outRows, outCols);
                 for(int j = 0 ; j < channels ; j++){
                     _output[i] = _output[i].add(m[j].correlate(_filters[i][j]));
                 }
+                _output[i] = _output[i].add(_bias[i]);
             }
         } catch (Exception e) {
             e.printStackTrace();

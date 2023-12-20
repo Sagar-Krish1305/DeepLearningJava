@@ -30,27 +30,7 @@ public class NeuralNetwork {
 
     public void addFullyConnectedLayer(int _inputSize, int _outputSize, double learningRate, long SEED){
 
-        FullyConnectedLayer _fcl = new FullyConnectedLayer(_inputSize, _outputSize, learningRate, SEED) {
-
-            @Override
-            public double activationFunction(double d) {
-                if(type == 0){
-                    return ActivationFunction.LeakyReLU(leak, d);
-                }
-
-                return ActivationFunction.SigmoidFunction(d);
-            }
-
-            @Override
-            public double activationFunctionDerivative(double d) {
-                if(type == 0){
-                    return ActivationFunction.LeakyReLUDerivative(leak, d);
-                }
-
-                return ActivationFunction.SigmoidFunctionDerivative(d);
-            }
-            
-        };
+        FullyConnectedLayer _fcl = new FullyConnectedLayer(_inputSize, _outputSize, learningRate, SEED);
 
         if(_layers.size() != 0){
             _layers.get(_layers.size() - 1)._nextLayer = _fcl;
@@ -70,27 +50,7 @@ public class NeuralNetwork {
 
         int _inputSize = _layers.get(_layers.size() - 1).outputElements();
 
-        FullyConnectedLayer _fcl = new FullyConnectedLayer(_inputSize, _outputSize, learningRate, SEED) {
-
-            @Override
-            public double activationFunction(double d) {
-                if(type == 0){
-                    return ActivationFunction.LeakyReLU(leak, d);
-                }
-
-                return ActivationFunction.SigmoidFunction(d);
-            }
-
-            @Override
-            public double activationFunctionDerivative(double d) {
-                if(type == 0){
-                    return ActivationFunction.LeakyReLUDerivative(leak, d);
-                }
-
-                return ActivationFunction.SigmoidFunctionDerivative(d);
-            }
-            
-        };
+        FullyConnectedLayer _fcl = new FullyConnectedLayer(_inputSize, _outputSize, learningRate, SEED);
 
         if(_layers.size() != 0){
             _layers.get(_layers.size() - 1)._nextLayer = _fcl;
@@ -139,7 +99,7 @@ public class NeuralNetwork {
 
     public void addActivationLayer(int type){
         int _inputSize = _layers.get(_layers.size() - 1).outputElements();
-        ActivationLayer a = new ActivationLayer(type, _inputSize, 1);
+        ActivationLayer a = new ActivationLayer(type, _inputSize, learningRate);
         if(_layers.size() != 0){
             _layers.get(_layers.size() - 1)._nextLayer = a;
             a._prevLayer = _layers.get(_layers.size() - 1);
@@ -160,8 +120,6 @@ public class NeuralNetwork {
     public void train(double[] inputs, double[] target){
         
         double[] output = getOutput(inputs);
-        System.out.println(output.length);
-        System.out.println(target.length);
         try {
             Matrix gradLoss = LossFunction.BinaryCrossEntropyGrad(output, target);
             _layers.get(_layers.size() - 1).backPropogation(UTILFunctions.outputAsArray(gradLoss));

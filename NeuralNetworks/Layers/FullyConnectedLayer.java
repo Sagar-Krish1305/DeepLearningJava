@@ -1,10 +1,9 @@
 package NeuralNetworks.Layers;
-import java.util.Arrays;
 
 import NeuralNetworks.Matrix.Matrix;
 import NeuralNetworks.Matrix.UTILFunctions;
 
-public abstract class FullyConnectedLayer extends Layer{
+public class FullyConnectedLayer extends Layer{
     long SEED;
     Matrix weights;
     Matrix bias;
@@ -46,9 +45,6 @@ public abstract class FullyConnectedLayer extends Layer{
             //setting up the lastOutput
             lastOutputs = (Y);
 
-            // Now Activate
-            Y = activate(Y);
-
             return Y;
         } catch (Exception e) {
             System.out.println(e.getMessage());
@@ -71,34 +67,27 @@ public abstract class FullyConnectedLayer extends Layer{
     }
 
     @Override
-    public void backPropogation(double[] DlDo) { // we have been given the grad loss
+    public void backPropogation(double[] DeDy) { // we have been given the grad loss
 
-        Matrix DoDzmatrix = deactivate(lastOutputs);
-        Matrix Dldomatrix = UTILFunctions.ArrayToMatrix(DlDo);
-        Matrix DzDwmatrix = lastInputs;
-        
+        // we want DeDw, DeDb
         try {
-             //Updating the bias Matrix
-            Matrix x = DoDzmatrix.Dot(Dldomatrix);
-            Matrix bias_error = x; // here we should also mult [1,1,1,1,1...]
-            bias = bias.add(bias_error.mult(-learningRate));
+            Matrix DeDymatrix = UTILFunctions.ArrayToMatrix(DeDy);
+            Matrix DeDw = lastInputs.mult(DeDymatrix.transpose());
+            Matrix DeDb = DeDymatrix;
+            Matrix DeDx = weights.mult(DeDymatrix);
 
-            // Updating the weight Matrix
-            
-            Matrix weight_error = DzDwmatrix.mult(x.transpose());
-            weights = weights.add(weight_error.mult(-learningRate));
 
+            weights = weights.add(DeDw.mult(-learningRate));
+            bias = bias.add(DeDb.mult(-learningRate));
 
             if(_prevLayer != null){
-                // getting the new DlDo
-                // it is just the gradLoss of last layer's output
-                
-                Matrix DlDxMatrix = weights.mult(Dldomatrix.Dot(DoDzmatrix));
-                _prevLayer.backPropogation(UTILFunctions.outputAsArray(DlDxMatrix));
+                _prevLayer.backPropogation(UTILFunctions.outputAsArray(DeDx));
             }
-        }catch(Exception e){
+        } catch (Exception e) {
+
             e.printStackTrace();
         }
+        
             
 
     }
@@ -112,33 +101,6 @@ public abstract class FullyConnectedLayer extends Layer{
     public void backPropogation(Matrix[] gradLoss) {
         backPropogation(UTILFunctions.outputAsArray(Matrix.flattenMatrix(gradLoss, _prevLayer.outputRows(), _prevLayer.outputCols())));
     }
-
-    public abstract double activationFunction(double d);
-    public abstract double activationFunctionDerivative(double d);
-
-
-
-    private Matrix activate(Matrix m){
-        Matrix m1 = new Matrix(m.rows, m.cols);
-        for(int i = 0 ; i < m.rows ; i++){
-            for(int j = 0 ; j < m.cols ; j++){
-                m1.data[i][j] = activationFunction(m.data[i][j]);
-            }
-        }
-        return m1;
-    }
-
-    private Matrix deactivate(Matrix m){
-        Matrix m1 = new Matrix(m.rows, m.cols);
-        for(int i = 0 ; i < m.rows ; i++){
-            for(int j = 0 ; j < m.cols ; j++){
-                m1.data[i][j] = activationFunctionDerivative(m.data[i][j]);
-            }
-        }
-        return m1;
-    }
-
-    
 
     
 }
