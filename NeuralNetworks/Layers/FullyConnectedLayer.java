@@ -19,7 +19,7 @@ public class FullyConnectedLayer extends Layer{
         
         weights = new Matrix(nInputs, nOutputs); // one extra for bias
         bias = new Matrix(nOutputs, 1);
-        // Initally Random Weights and are Assigned     
+        // Initally Random Weights and are Assigned      
         weights.randomizeMatrix(SEED); 
         bias.randomizeMatrix(SEED);
     }

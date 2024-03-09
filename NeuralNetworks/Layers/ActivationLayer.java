@@ -17,7 +17,7 @@ public class ActivationLayer extends Layer{
         Matrix m = activate(UTILFunctions.ArrayToMatrix(inputs));
         lastOutput = UTILFunctions.outputAsArray(m);
         if(_nextLayer != null){
-            return _nextLayer.getOutput(UTILFunctions.outputAsArray(m));
+            return _nextLayer.getOutput(lastOutput);
         }
         return m;
     }

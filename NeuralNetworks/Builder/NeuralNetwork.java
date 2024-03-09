@@ -5,6 +5,7 @@ import NeuralNetworks.Layers.ActivationLayer;
 import NeuralNetworks.Layers.ConvolutionalLayer;
 import NeuralNetworks.Layers.FullyConnectedLayer;
 import NeuralNetworks.Layers.Layer;
+
 import NeuralNetworks.LossFunctions.LossFunction;
 import NeuralNetworks.Matrix.Matrix;
 import NeuralNetworks.Matrix.UTILFunctions;
@@ -121,7 +122,7 @@ public class NeuralNetwork {
         
         double[] output = getOutput(inputs);
         try {
-            Matrix gradLoss = LossFunction.BinaryCrossEntropyGrad(output, target);
+            Matrix gradLoss = LossFunction.MeanSquaredLossGrad(output, target);
             _layers.get(_layers.size() - 1).backPropogation(UTILFunctions.outputAsArray(gradLoss));
 
         } catch (Exception e) {
@@ -139,7 +140,7 @@ public class NeuralNetwork {
                 System.out.println("FULLY CONNECTED LAYER : ");
             }else if(l instanceof ConvolutionalLayer){
                 System.out.println("CONVOLUTIONAL LAYER");
-            }else{
+            }else if(l instanceof ActivationLayer){
                 System.out.println("ACTIVATION LAYER");
             }
             System.out.println();

@@ -36,40 +36,35 @@ public class DataReader {
         // Making the NeuralNetwork;
         NeuralNetwork nn = new NeuralNetwork(2, 143, 0.4);
         nn.addConvolutionLayer(28, 28, 1, 1, 5);
+        // nn.addMaxPoolingLayer(5, 2);
         nn.addActivationLayer(2);
-        nn.addFullyConnectedLayer(2);
+        nn.addFullyConnectedLayer(4);
         nn.addActivationLayer(2);
         
-        ArrayList<Matrix> imgs = new ArrayList<>();
-        ArrayList<Integer> l = new ArrayList<>();
-        for(int i = 0 ; i < testImages.size() ; i++){
-            if(testLabels.get(i)==1 || testLabels.get(i)==0){
-                imgs.add(testImages.get(i));
-                l.add(testLabels.get(i));
-            }
-        }
+        
 
-        double target[] = new double[]{0,0};
-        nn.printDetails();
+        double target[] = new double[]{0,0,0,0};
+        // nn.printDetails();
         int n = 0;
-        for(int i = 0 ; i < imgs.size() ; i++){
-
-            target[l.get(i)] = 1; // 0 or 1
-            nn.train(UTILFunctions.outputAsArray(Matrix.flattenMatrix(new Matrix[]{imgs.get(i)}, 28, 28)), target);
-            target[l.get(i)] = 0;
-            System.out.println(n++);
-
+        for(int i = 0 ; i < trainImages.size() ; i++){
+            if(trainLabels.get(i) > 3) continue;
+            target[trainLabels.get(i)] = 1; 
+            nn.train(UTILFunctions.outputAsArray(Matrix.flattenMatrix(new Matrix[]{trainImages.get(i)}, 28, 28)), target);
+            target[trainLabels.get(i)] = 0;
         }
 
+        System.out.println(n);
         
-        for(int a = 0 ; a < imgs.size() ; a++){
-        double[] d = nn.getOutput(UTILFunctions.outputAsArray(Matrix.flattenMatrix(new Matrix[]{
-            imgs.get(a)
-        }, 28 ,28)));
-        
-        System.out.println("OUTPUT PREDICTED : " + Arrays.toString(d));
-        System.out.println("OUTPUT REQUIRED : " + l.get(a));
-        System.out.println();
+        for(int a = 0 ; a < testImages.size() ; a++){
+            // if(testLabels.get(a)!=0 || testLabels.get(a)!=1) continue;
+            if(testLabels.get(a) > 3) continue;
+            double[] d = nn.getOutput(UTILFunctions.outputAsArray(Matrix.flattenMatrix(new Matrix[]{
+                testImages.get(a)
+            }, 28 ,28)));
+            
+            System.out.println("OUTPUT PREDICTED : " + Arrays.toString(d));
+            System.out.println("OUTPUT REQUIRED : " + testLabels.get(a));
+            System.out.println();
         }   
     }
 

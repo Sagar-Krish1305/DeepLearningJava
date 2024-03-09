@@ -24,7 +24,7 @@ public class LossFunction {
     }
 
     public static double clippedBinaryCrossEntropyGrad(double predictedProbability, double trueLabel) {
-        double epsilon = 1e-25; // Small value to avoid division by zero
+        double epsilon = 1e-15; // Small value to avoid division by zero
 
         // Avoid numerical instability by clipping predicted probabilities
         predictedProbability = Math.max(epsilon, Math.min(1 - epsilon, predictedProbability));

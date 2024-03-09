@@ -18,7 +18,7 @@ public abstract class DeepQ{
     double epsilon_decay;
     DeepQ(int episodes, double discountRate, double lR, int nActions, double epsilon_decay, long SEED){
         r = new Random(SEED);
-        nn = new NeuralNetwork(nActions, nActions);
+
         nn.addFullyConnectedLayer(1, 2*nActions, lR, SEED);
         nn.addFullyConnectedLayer(2*nActions, nActions, lR, SEED);
 
