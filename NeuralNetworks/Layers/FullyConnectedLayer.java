@@ -17,8 +17,9 @@ public class FullyConnectedLayer extends Layer{
         this.SEED = sEED;
         this.nInputs = nInputs;
         
-        weights = new Matrix(nInputs, nOutputs); // one extra for bias
+        weights = new Matrix(nInputs, nOutputs);
         bias = new Matrix(nOutputs, 1);
+
         // Initally Random Weights and are Assigned      
         weights.randomizeMatrix(SEED); 
         bias.randomizeMatrix(SEED);
@@ -27,27 +28,22 @@ public class FullyConnectedLayer extends Layer{
 
     public Matrix feedForwardPass(double[] inputs){
 
-        // setting this up as last input
-            lastInputs = UTILFunctions.ArrayToMatrix(inputs);
+        // setting this up as last input. This can be used at the time of backpropogation.
+        lastInputs = UTILFunctions.ArrayToMatrix(inputs); 
         
         
         Matrix inputMatrix = UTILFunctions.ArrayToMatrix(inputs);
         try {
-
-            
             Matrix WTX = weights.transpose();
-            
-
             WTX = WTX.mult(inputMatrix);
             Matrix Y = WTX.add(bias);
-            // get hypothesis according to the above equation
             
             //setting up the lastOutput
             lastOutputs = (Y);
-
             return Y;
         } catch (Exception e) {
-            System.out.println(e.getMessage());
+            System.out.println("Error At The Fully Connected Layer. So, NULL Value will be returned.");
+            e.printStackTrace();
         }
         
         return null;
@@ -68,7 +64,6 @@ public class FullyConnectedLayer extends Layer{
 
     @Override
     public void backPropogation(double[] DeDy) { // we have been given the grad loss
-
         // we want DeDw, DeDb
         try {
             Matrix DeDymatrix = UTILFunctions.ArrayToMatrix(DeDy);
@@ -88,8 +83,6 @@ public class FullyConnectedLayer extends Layer{
             e.printStackTrace();
         }
         
-            
-
     }
 
     @Override

@@ -19,11 +19,13 @@ public abstract class DeepQ{
     DeepQ(int episodes, double discountRate, double lR, int nActions, double epsilon_decay, long SEED){
         r = new Random(SEED);
 
-        nn.addFullyConnectedLayer(1, 2*nActions, lR, SEED);
-        nn.addFullyConnectedLayer(2*nActions, nActions, lR, SEED);
+        nn = new NeuralNetwork(2, SEED, lR);
+        nn.addConvolutionLayer(30, 30, 1, 1, 5);
+        nn.addActivationLayer(2);
+        nn.addFullyConnectedLayer(4);
+        nn.addActivationLayer(2);
 
         memory = new ArrayList<>();
-
 
         this.nActions = nActions;
         this.discountRate = discountRate;
@@ -32,10 +34,9 @@ public abstract class DeepQ{
 
 
     public int act(int state){
-        if(r.nextDouble(0,1) <= epsilon){
+        if(r.nextDouble() <= epsilon){
             return r.nextInt(nActions);
-        }   
-
+        } 
         double[] output = nn.getOutput(new double[]{state});
         return getMaxQValuedAction(output);
     }
@@ -51,7 +52,8 @@ public abstract class DeepQ{
         }   
         return a;
     }
-
+    abstract public int getNextState(int state, int action);
+    abstract public double getReward(int newState);
     private double getMaxQValue(double[] outputs){
 
         double m = Double.MIN_VALUE;
@@ -71,17 +73,13 @@ public abstract class DeepQ{
         ArrayList<ExperiencedMemory> minibatch = randomSample(batchSize);
         for(ExperiencedMemory e : minibatch){
             double target = e.reward;
-            if(!e.done){ 
-                e.done = true;
-                target = e.reward + discountRate * getMaxQValue(nn.getOutput(new double[]{ e.nextState }));
-            }
+            target = e.reward + discountRate * getMaxQValue(nn.getOutput(new double[]{ e.nextState }));
 
             double[] input = new double[] {e.state};
             double[] target_ = nn.getOutput(input);
             target_[e.action] = target;
 
             nn.train(input, target_);
-
         }
 
         if(epsilon > 0.01){
@@ -93,16 +91,15 @@ public abstract class DeepQ{
         ArrayList<ExperiencedMemory> batch = new ArrayList<>();
         while(batchSize!=0){
             for(int i = 0 ; i < memory.size() ; i++){
-                if(r.nextDouble(1) > 0.5 && batchSize!=0){
+                if(r.nextDouble() >= 0.5 && batchSize!=0){
                     batch.add(memory.get(i));
                     batchSize--;
                 }
             }
         }
         return batch;
-    } 
+    }
 
-    
 }
 
 class ExperiencedMemory{
@@ -110,7 +107,6 @@ class ExperiencedMemory{
     int action;
     double reward;
     int nextState;
-    Boolean done = false;
     public ExperiencedMemory(int state, int action, double reward, int nextState) {
         this.state = state;
         this.action = action;
@@ -118,3 +114,4 @@ class ExperiencedMemory{
         this.nextState = nextState;
     }
 }
+
