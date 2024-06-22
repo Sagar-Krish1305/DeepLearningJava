@@ -12,7 +12,7 @@ import NeuralNetworks.Matrix.Matrix;
 import NeuralNetworks.Matrix.UTILFunctions;
 
 
-public class DataReader {
+public class MNISTSolver {
     public static void main(String[] args) {
         String trainImagesFile = "MNIST/train-images-idx3-ubyte/train-images-idx3-ubyte";
         String trainLabelsFile = "MNIST/train-labels-idx1-ubyte/train-labels-idx1-ubyte";
@@ -36,7 +36,6 @@ public class DataReader {
         // Making the NeuralNetwork;
         NeuralNetwork nn = new NeuralNetwork(2, 143, 0.4);
         nn.addConvolutionLayer(28, 28, 1, 1, 5);
-        // nn.addMaxPoolingLayer(5, 2);
         nn.addActivationLayer(2);
         nn.addFullyConnectedLayer(4);
         nn.addActivationLayer(2);
@@ -121,6 +120,4 @@ public class DataReader {
 
         return labels;
     }
-
-
 }
