@@ -4,5 +4,8 @@
         "iostream": "cpp",
         "forward_list": "cpp",
         "list": "cpp"
-    }
+    },
+    "java.project.referencedLibraries": [
+        "/Users/krishsagar/Desktop/DeepLearningJava/core.jar"
+    ]
 }

@@ -1,0 +1,38 @@
+{
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "Compile Java",
+            "type": "shell",
+            "command": "javac",
+            "args": [
+                "-cp",
+                ".:/Users/krishsagar/Desktop/DeepLearningJava/lib/core.jar",
+                "*.java"
+            ],
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            },
+            "problemMatcher": [
+                "$javac"
+            ],
+            "detail": "Compiles all Java files in the directory."
+        },
+        {
+            "label": "Run Java",
+            "type": "shell",
+            "command": "java",
+            "args": [
+                "-cp",
+                ".:/Users/krishsagar/Desktop/DeepLearningJava/lib/core.jar",
+                "*"
+            ],
+            "group": {
+                "kind": "test",
+                "isDefault": true
+            },
+            "problemMatcher": []
+        }
+    ]
+}
